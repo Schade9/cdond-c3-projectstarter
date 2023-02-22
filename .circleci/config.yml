@@ -316,7 +316,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.10-alpine3.16
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
@@ -342,11 +342,11 @@ jobs:
             echo "Wait for Server to accept GET connection request:"
             sleep 60
             
-            if curl -v "${API_URL}/api/status" | grep "ok"
+            if curl -s $API_URL/api/status | grep "ok"
             then
               return 0
             else
-              return 0
+              return 1
             fi
       - run:
           name: Frontend smoke test.

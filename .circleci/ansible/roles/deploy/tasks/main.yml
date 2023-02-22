@@ -1,52 +1,20 @@
 ---
-- name: "update local repository"
-  become: true
-  apt:
-    update_cache: yes
-    cache_valid_time: 86400
-- name: remove stale dependencies
-  become: true
-  apt:
-    autoremove: yes
-
-- name: "upgrade packages"
-  become: true
-  apt: 
-    upgrade: yes
-    
-- name: "install nodejs and npm"
-  become: true
-  apt:
-      name: ["nodejs", "npm"]
-      state: latest
-      update_cache: yes
-
-- name: "install pm2"
-  become: true
-  npm:
-      name: pm2
-      global: yes
-      production: yes
-      state: present
-
-- name: Create Backend App Directory
+- name: "Create backend app directory"
   file:
-    path: ~/backend_app_dir
+    path: ~/app
     state: directory
 
-- name: "Copy artifact into Instance"
-  become: true
-  copy:
-    src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/backend_app_dir/artifact.tar.gz
+- name: "Unarchive app"
+  unarchive:
+    src: artifact.tar.gz
+    dest: ~/app
 
-- name: "Start Backend App"
-  become: true
+- name: "Install dependencies"
   shell: |
-    cd /home/ubuntu/backend_app_dir
-    tar xzvf artifact.tar.gz
-    npm install
-    npm run build
-    pm2 stop all
-    pm2 start npm -- start
-      
+    cd ~/app
+    npm i
+- name: "Start the app"
+  shell: |
+    cd ~/app/dist
+    pm2 stop default
+    pm2 start main.js
