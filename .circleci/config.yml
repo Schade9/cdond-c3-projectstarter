@@ -37,6 +37,34 @@ commands:
               npm install
               npm run migration:revert
             fi
+  install_awscli:
+    description: Install AWS CLI v2
+    steps:
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+  install_ansible:
+    description: Install Ansible
+    steps:
+      - run:
+          name: Install Ansible
+          command: |
+            python3 -m pip install --user ansible
+  install_nodejs:
+    description: Install Node.js 13.8.0
+    steps:
+      - run:
+          name: Install Node.js 13.8.0
+          command: |
+            # Install Node.js LTS version as our base Node.js version
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt install -y nodejs
+            # Use n version manager to use Node.js v13.8.0
+            sudo npm install --global n
+            sudo n 13.8.0
             
 jobs:
   build-frontend:
@@ -269,10 +297,13 @@ jobs:
             - "6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update --no-cache ansible tar gzip nodejs npm curl aws-cli
+      - install_ansible
+      - install_awscli
+      - install_nodejs
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       apk add --update --no-cache ansible tar gzip nodejs npm curl aws-cli
       - run:
           name: Deploy backend
           command: |
@@ -297,11 +328,13 @@ jobs:
             ls -al
             npm install
             npm run build
+            tar -czf artifact.tar.gz dist/* package*
             cd ..
+            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
             pwd
             ls -al
             # zip the backend directory
-            tar -C backend -czvf artifact.tar.gz .
+            # tar -C backend -czvf artifact.tar.gz .
 
             # navigate to ansible & display content of inventory
             cd .circleci/ansible

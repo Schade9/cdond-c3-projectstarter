@@ -6,7 +6,7 @@
 
 - name: "Unarchive app"
   unarchive:
-    src: ~/project/artifact.tar.gz
+    src: artifact.tar.gz
     dest: ~/app
 
 - name: "Install dependencies"
