@@ -400,15 +400,14 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees
-            echo ${URL}
+            URL=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com
+            echo $URL
             
-            if curl -s ${URL} | grep "Welcome"
+            if curl -s $URL | grep "Welcome"
             then
-              # Change this(from 1) to 0 after the job fails
-              return 0
+              exit 0
             else
-              return 1
+              exit 1
             fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
