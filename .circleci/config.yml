@@ -341,13 +341,15 @@ jobs:
 
             echo "Wait for Server to accept GET connection request:"
             sleep 60
+            
+            if [[ 'ok' =~ $(curl -s --connect-timeout 5 ${API_URL}/api/status | grep -o ok) ]];then return 0 else return 1;fi
 
             if curl -v "${API_URL}/api/status" | grep "ok"
-            then
-              return 0
-            else
-              return 1
-            fi
+            # then
+            #   return 0
+            # else
+            #   return 1
+            # fi
       - run:
           name: Frontend smoke test.
           command: |
@@ -362,10 +364,10 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure
-      # - destroy-environment:
-      #       Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-      #       Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+            Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+            Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
