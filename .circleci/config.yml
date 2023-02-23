@@ -309,19 +309,18 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
-            npm install
+            npm install --legacy-peer-deps
             npm run build
             tar -czf artifact.tar.gz dist/* package*
             cd ..
             cp backend/artifact.tar.gz ~/project
 
-            cd backend
-            # export TYPEORM_MIGRATIONS_DIR=./migrations
-            # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+            export TYPEORM_MIGRATIONS_DIR=./migrations
+            export TYPEORM_ENTITIES=./modules/domain/**/*.entity.ts
 
-            export TYPEORM_MIGRATIONS_DIR=./src/migrations
-            export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
-            export TYPEORM_MIGRATIONS=./src/migrations/*.ts
+            # export TYPEORM_MIGRATIONS_DIR=./src/migrations
+            # export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
+            export TYPEORM_MIGRATIONS=./migrations/*.ts
             cd .circleci/ansible
             echo "Content  of the inventory.txt file is -------: "
             cat inventory.txt
