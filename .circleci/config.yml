@@ -29,7 +29,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure  https://kvdb.io/8PYut7tBLVrRwAuieg8QqS/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure https://kvdb.io/8PYut7tBLVrRwAuieg8QqS/migration_<< parameters.WORKFLOW_ID >>)
             echo $SUCCESS
             if(( $SUCCESS==1 )); 
             then
@@ -308,59 +308,59 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd backend
-            npm install
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
-            cd ..
-            cp backend/artifact.tar.gz ~/project
-
-            export TYPEORM_MIGRATIONS_DIR=./migrations
-            export TYPEORM_ENTITIES=./modules/domain/**/*.entity.ts
-            export TYPEORM_MIGRATIONS=./migrations/*.ts
-
-            # export TYPEORM_MIGRATIONS_DIR=./src/migrations
-            # export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
-            
-            cd .circleci/ansible
-            echo "Content  of the inventory.txt file is -------: "
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
-
-            # pwd
             # cd backend
-            
-            # # set up environment variables for backend connections
-            # touch .env
-            # echo ENVIRONMENT=production > ".env"
-            # echo TYPEORM_CONNECTION=postgres >> ".env"
-            # echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
-            # echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
-            # echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
-            # echo NODE_ENV=production >> ".env"
-            # echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
-            # echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
-            # echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
-            # echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
-            # echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-
-            # pwd
-            # ls -al
             # npm install
             # npm run build
             # tar -czf artifact.tar.gz dist/* package*
             # cd ..
             # cp backend/artifact.tar.gz ~/project
-            # pwd
-            # ls -al
-            # # zip the backend directory
-            # # tar -C backend -czvf artifact.tar.gz
 
-            # # navigate to ansible & display content of inventory
+            # export TYPEORM_MIGRATIONS_DIR=./migrations
+            # export TYPEORM_ENTITIES=./modules/domain/**/*.entity.ts
+            # export TYPEORM_MIGRATIONS=./migrations/*.ts
+
+            # # export TYPEORM_MIGRATIONS_DIR=./src/migrations
+            # # export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
+            
             # cd .circleci/ansible
-            # echo "Contents  of the inventory.txt file is -------"
+            # echo "Content  of the inventory.txt file is -------: "
             # cat inventory.txt
             # ansible-playbook -i inventory.txt deploy-backend.yml
+
+            pwd
+            cd backend
+            
+            # set up environment variables for backend connections
+            touch .env
+            echo ENVIRONMENT=production > ".env"
+            echo TYPEORM_CONNECTION=postgres >> ".env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
+            echo NODE_ENV=production >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
+
+            pwd
+            ls -al
+            npm install
+            npm run build
+            tar -czf artifact.tar.gz dist/* package*
+            cd ..
+            cp backend/artifact.tar.gz ~/project
+            pwd
+            ls -al
+            # zip the backend directory
+            # tar -C backend -czvf artifact.tar.gz
+
+            # navigate to ansible & display content of inventory
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment:
             Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
