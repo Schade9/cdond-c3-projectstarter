@@ -201,7 +201,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"] 
+          fingerprints: ["2e:6f:4a:b8:ef:8f:09:5c:65:32:ae:b2:7d:51:4f:1f"] 
       - attach_workspace:
           at: ~/
       - install_awscli
@@ -295,7 +295,7 @@ jobs:
       # Checkout code from git
       - checkout
       - add_ssh_keys:
-          fingerprints: ["6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"]
+          fingerprints: ["2e:6f:4a:b8:ef:8f:09:5c:65:32:ae:b2:7d:51:4f:1f"]
       - attach_workspace:
           at: ~/
       - install_ansible
