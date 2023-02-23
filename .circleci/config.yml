@@ -201,7 +201,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"]
+          fingerprints: ["6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"] 
       - attach_workspace:
           at: ~/
       - run:
@@ -293,8 +293,7 @@ jobs:
       # Checkout code from git
       - checkout
       - add_ssh_keys:
-          fingerprints: 
-            - "6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"
+          fingerprints: ["6e:fd:35:8d:de:fa:18:74:f7:fa:f1:87:63:8a:79:34"]
       - attach_workspace:
           at: ~/
       - install_ansible
@@ -313,9 +312,14 @@ jobs:
             tar -czf artifact.tar.gz dist/* package*
             cd ..
             cp backend/artifact.tar.gz ~/project
-            export TYPEORM_MIGRATIONS_DIR=./migrations
-            export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-            export TYPEORM_MIGRATIONS=./migrations/*.ts
+
+            cd backend
+            # export TYPEORM_MIGRATIONS_DIR=./migrations
+            # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+            
+            export TYPEORM_MIGRATIONS_DIR=./src/migrations
+            export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
+            export TYPEORM_MIGRATIONS=./src/migrations/*.ts
             cd .circleci/ansible
             echo "Content  of the inventory.txt file is -------: "
             cat inventory.txt
